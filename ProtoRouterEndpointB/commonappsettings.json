@@ -11,8 +11,8 @@
     },
     "MessagePropertyEncryption": {
       "Enabled": false,
-      "KeyIdentifier": "2019-02",
-      "Key": "236OeCPRxkxgCoSTIEasc3RxYB4p5KKkF"
+      "KeyIdentifier": "",
+      "Key": ""
     },
     "SagaAuditEnabled": false,
     "DefaultSagaTimeoutInHours": 1,
