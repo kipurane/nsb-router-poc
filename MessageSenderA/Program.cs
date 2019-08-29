@@ -23,7 +23,9 @@
             configuration = ConfigurationCreator.GetConfiguration();
             endpointConfiguration = new EndpointConfiguration(configuration["NServiceBus:EndpointName"]);
 
-            ConfigureTransportAndRouting();
+          ConfigureTransportAndRouting();
+//            UseLearningTransport();
+           
             ConfigureSerialization();
             ConfigureRecoverability();
             ConfigureLogging();
@@ -33,10 +35,17 @@
             var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             Console.WriteLine($"Sending command: {nameof(SendCommandFromEndpointA)}...");
-            
-            await endpointInstance.Send(new SendCommandFromEndpointA()).ConfigureAwait(false);
+
+            var sendOptions = new SendOptions();
+            sendOptions.SetDestination("proto-router-endpoint-a");
+            await endpointInstance.Send(new SendCommandFromEndpointA(), sendOptions).ConfigureAwait(false);
 
             await endpointInstance.Stop().ConfigureAwait(false);
+        }
+
+        private static void UseLearningTransport()
+        {
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
         }
 
         private static void ConfigureTransportAndRouting(
