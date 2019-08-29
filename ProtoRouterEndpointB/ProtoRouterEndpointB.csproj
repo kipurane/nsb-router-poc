@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Shared\Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+        <PackageReference Include="NServiceBus" Version="7.1.10" />
+        <PackageReference Include="NServiceBus.CustomChecks" Version="3.0.1" />
+        <PackageReference Include="NServiceBus.DataBus.AzureBlobStorage" Version="3.0.0" />
+        <PackageReference Include="NServiceBus.Encryption.MessageProperty" Version="2.0.0" />
+        <PackageReference Include="NServiceBus.Heartbeat" Version="3.0.1" />
+        <PackageReference Include="NServiceBus.Metrics.ServiceControl" Version="3.0.3" />
+        <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
+        <PackageReference Include="NServiceBus.Persistence.AzureStorage" Version="2.3.0" />
+        <PackageReference Include="NServiceBus.Router.Connector" Version="3.5.1" />
+        <PackageReference Include="NServiceBus.SagaAudit" Version="3.0.1" />
+        <PackageReference Include="NServiceBus.Serilog" Version="6.4.1" />
+        <PackageReference Include="NServiceBus.Transport.AzureServiceBus" Version="1.2.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+        <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
+        <PackageReference Include="Serilog.Sinks.Exceptionless" Version="3.1.0" />
+        <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.development.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="commonappsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

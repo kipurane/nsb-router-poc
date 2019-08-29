@@ -1,0 +1,90 @@
+{
+  "NServiceBus": {
+    "EndpointName": "",
+    "AuditQueue": "audit",
+    "ErrorQueue": "error",
+    "ServiceControlQueue": "local.servicecontrol",
+    "Retries" : {
+      "ImmediateRetriesAmount": 1,
+      "DelayedRetriesAmount": 1,
+      "DelayedRetriesTimeIncreaseInSeconds": 10
+    },
+    "MessagePropertyEncryption": {
+      "Enabled": false,
+      "KeyIdentifier": "",
+      "Key": ""
+    },
+    "SagaAuditEnabled": false,
+    "DefaultSagaTimeoutInHours": 1,
+    "DefaultExecutionIntervalInMinutes": 10,
+    "HeartBeats" : {
+      "Enabled": true,
+      "SendFrequencyInSeconds": 300
+    },
+    "NonDurableMessagingTimeToBeReceivedInSeconds": 30,
+    "ServiceControlMetrics" : {
+      "Enabled": false,
+      "Address": "local.monitoring",
+      "SendIntervalInSeconds": 10,
+      "InstanceId": ""
+    },
+    "ApplicationInsightsMetrics": {
+      "Enabled": false,
+      "InstrumentationKey": ""
+    },
+    "Transport" : {
+      "TransactionMode": "default"
+    }
+  },
+  "EndpointDestinations": {
+  },
+  "KeyVault": {
+    "BaseUrl": "",
+    "ClientId": "",
+    "ClientSecret": ""
+  },
+  "ConnectionStrings": {
+    "NServiceBus": {
+      "AzureStoragePersistence": "",
+      "AzureServiceBusTransport": "",
+      "AzureStorageDataBus": ""
+    }
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "System": "Warning",
+        "Microsoft": "Warning"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "Exceptionless",
+        "Args": {
+          "apiKey": "-",
+          "restrictedToMinimumLevel": "Warning"
+        }
+      },
+      {
+        "Name": "Async",
+        "Args": {
+          "configure": [
+            {
+              "Name": "RollingFile",
+              "Args": {
+                "pathFormat": "D:\\Home\\LogFiles\\Esb\\endpoint-log-{Date}.txt",
+                "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
+                "fileSizeLimitBytes": 20971520,
+                "retainedFileCountLimit": 10
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "Enrich": [
+      "FromLogContext"
+    ]
+  }
+}
