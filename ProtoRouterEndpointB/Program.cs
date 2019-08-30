@@ -22,8 +22,8 @@
             configuration = ConfigurationCreator.GetConfiguration();
             endpointConfiguration = new EndpointConfiguration(configuration["NServiceBus:EndpointName"]);
 
-//            ConfigureTransportAndRouting();
-            UserLearningTransport();
+            ConfigureTransportAndRouting();
+//            UseLearningTransport();
                 
             ConfigureSerialization();
             ConfigureRecoverability();
@@ -41,7 +41,7 @@
                 .ConfigureAwait(false);
         }
         
-        private static void UserLearningTransport()
+        private static void UseLearningTransport()
         {
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
             var bridge = transport.Routing().ConnectToRouter("proto-router");

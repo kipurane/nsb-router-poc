@@ -19,9 +19,9 @@
             var routerConfig = new RouterConfiguration(routerName);
             var staticRouting = routerConfig.UseStaticRoutingProtocol();
 
-//            UseAzureServiceBusTransport(config, routerConfig, staticRouting);
+            RouteFromAzureToAzure(config, routerConfig, staticRouting);
 //            RouteFromLearningToAzure(routerConfig, config, staticRouting);
-            RouteFromAzureToLearning(routerConfig, config, staticRouting);
+//            RouteFromAzureToLearning(routerConfig, config, staticRouting);
 
             routerConfig.AutoCreateQueues();
             routerConfig.PoisonQueueName = $"{routerName}-poison";
@@ -38,26 +38,33 @@
         private static void RouteFromAzureToLearning(RouterConfiguration routerConfig, IConfiguration config, RouteTable staticRouting)
         {
             routerConfig.AddInterface<LearningTransport>("LearningTransportA", t => { });
-            var connectionStringB = config.GetConnectionString("NServiceBus:AzureServiceBusB");
-            var azureServiceBusAInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusB", t => { t.ConnectionString(connectionStringB); });
-            staticRouting.AddForwardRoute("AzureServiceBusB", "LearningTransportA");
+            var connectionStringB = config.GetConnectionString("NServiceBus:AzureServiceBusA");
+            var azureServiceBusAInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusA", t => { t.ConnectionString(connectionStringB); });
+            staticRouting.AddForwardRoute("AzureServiceBusA", "LearningTransportA");
         }
 
         private static void RouteFromLearningToAzure(RouterConfiguration routerConfig, IConfiguration config, RouteTable staticRouting)
         {
             routerConfig.AddInterface<LearningTransport>("LearningTransportA", t => { });
-            var connectionStringB = config.GetConnectionString("NServiceBus:AzureServiceBusB");
-            var azureServiceBusBInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusB", t => { t.ConnectionString(connectionStringB); });
-            staticRouting.AddForwardRoute("LearningTransportA", "AzureServiceBusB");
+            var connectionStringB = config.GetConnectionString("NServiceBus:AzureServiceBusA");
+            var azureServiceBusBInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusA", t => { t.ConnectionString(connectionStringB); });
+            staticRouting.AddForwardRoute("LearningTransportA", "AzureServiceBusA");
         }
 
-        private static void UseAzureServiceBusTransport(IConfiguration config, RouterConfiguration routerConfig, RouteTable staticRouting)
+        private static void RouteFromAzureToAzure(IConfiguration config, RouterConfiguration routerConfig, RouteTable staticRouting)
         {
             var connectionStringA = config.GetConnectionString("NServiceBus:AzureServiceBusA");
-            var azureServiceBusAInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusA", t => { t.ConnectionString(connectionStringA); });
+            var azureServiceBusAInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusA", t => { 
+                t.ConnectionString(connectionStringA);
+                t.Transactions(TransportTransactionMode.ReceiveOnly);
+            });
 
             var connectionStringB = config.GetConnectionString("NServiceBus:AzureServiceBusB");
-            var azureServiceBusBInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusB", t => { t.ConnectionString(connectionStringB); });
+            var azureServiceBusBInterface = routerConfig.AddInterface<AzureServiceBusTransport>("AzureServiceBusB", t =>
+            {
+                t.ConnectionString(connectionStringB);
+                t.Transactions(TransportTransactionMode.ReceiveOnly);
+            });
 
             staticRouting.AddForwardRoute("AzureServiceBusA", "AzureServiceBusB");
             staticRouting.AddForwardRoute("AzureServiceBusB", "AzureServiceBusA");
